@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
-
+const Users = require('./routes/user.router');
 
 const app = express();
 
@@ -21,12 +21,12 @@ mongoose.connect(URL).catch(console.error);
 
 const connection = mongoose.connection;
 
+app.use('/users', Users);
 
 connection.once('open', () => {
-    console.log('Mongo DB Connection success.');
+  console.log('Mongo DB Connection success.');
 });
 
-
 app.listen(Port, () => {
-    console.log(`Server is up and running on port ${Port}.`);
+  console.log(`Server is up and running on port ${Port}.`);
 });
