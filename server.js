@@ -4,6 +4,13 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const Users = require('./routes/user.router');
+const File = require('./routes/file');
+const multer = require('multer');
+
+const Multer = multer({
+  storage:multer.memoryStorage(),
+  limits:1024*1024,
+})
 
 const app = express();
 
@@ -22,6 +29,7 @@ mongoose.connect(URL).catch(console.error);
 const connection = mongoose.connection;
 
 app.use('/users', Users);
+app.use('/upload',Multer.single("file"), File);
 
 connection.once('open', () => {
   console.log('Mongo DB Connection success.');
