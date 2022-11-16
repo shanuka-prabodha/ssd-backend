@@ -6,6 +6,13 @@ const dotenv = require("dotenv");
 const Users = require("./routes/user.router");
 const crypto = require("crypto");
 const Message = require("./routes/message.router");
+const File = require('./routes/file');
+const multer = require('multer');
+
+const Multer = multer({
+  storage:multer.memoryStorage(),
+  limits:1024*1024,
+})
 
 const app = express();
 
@@ -23,7 +30,8 @@ mongoose.connect(URL).catch(console.error);
 
 const connection = mongoose.connection;
 
-app.use("/users", Users);
+app.use('/users', Users);
+app.use('/upload',Multer.single("file"), File);
 
 app.use("/mgs", Message);
 
