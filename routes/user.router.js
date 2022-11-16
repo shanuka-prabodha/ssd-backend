@@ -73,7 +73,7 @@ router.post('/add', async (req, res) => {
 
   try {
     const user = new userModel(data);
-    const result = user.save(data);
+    const result = user.save();
     res.json({ message: 'User registered sucessfully.', error: false });
   } catch (error) {
     res.json({ message: error, error: true });
@@ -110,10 +110,35 @@ const createToken = async (data) => {
   return await new Promise((resolve, reject) => {
     const payload = { data };
     try {
-      var token = jwt.sign(payload, process.env.JWT_SECRET);
+      var token = jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: '10m',
+      });
       resolve(token);
-    } catch (error) {}
+    } catch (error) { }
   });
 };
+
+
+
+function verifyToken(req, res, next) {
+  //Get auth header value
+  const bearerHeader = req.headers['authorization'];
+  const token = bearerHeader && bearerHeader.split(' ')[1]
+  //checking if there is a token or not
+  if (token == null) {
+    return res.sendStatus(401)
+  } else {
+    jwt.verify(token, process.env.JWT_SECRET, (err, authData) => {
+      if (err) {
+        res.sendStatus(403)
+      } else {
+        req.user = authData
+        next()
+      }
+    })
+  }
+}
+
+
 
 module.exports = router;
