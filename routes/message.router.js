@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { request } = require("express");
 let Message = require("../models/message.model");
 const crypto = require("crypto");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 //symetric key encription start here
 
 const algorithm = "aes-256-cbc";
@@ -48,9 +48,12 @@ router.route("/add").post(verifyToken, async (req, res) => {
   }
 });
 
-router.route("/read").get(async (req, res) => {
+router.route("/read").post(async (req, res) => {
   if (req.body && req.body.encriptedmessage) {
     const encrtedmessage = req.body.encriptedmessage;
+    const key = req.headers["key"];
+
+    console.log(encrtedmessage);
 
     const messgaeobject = await Message.findOne({ message: encrtedmessage });
 
@@ -185,23 +188,22 @@ router.route("/asydicrp").get(async (req, res) => {
 
 function verifyToken(req, res, next) {
   //Get auth header value
-  const bearerHeader = req.headers['authorization'];
-  const token = bearerHeader && bearerHeader.split(' ')[1]
+  const bearerHeader = req.headers["authorization"];
+  const token = bearerHeader && bearerHeader.split(" ")[1];
   //checking if there is a token or not
   if (token == null) {
-    return res.sendStatus(401)
+    return res.sendStatus(401);
   } else {
     jwt.verify(token, process.env.JWT_SECRET, (err, authData) => {
       if (err) {
-        res.sendStatus(403)
+        res.sendStatus(403);
       } else {
-        req.user = authData
-        next()
+        req.user = authData;
+        next();
       }
-    })
+    });
   }
 }
-
 
 //asymetric user input key api start here
 
