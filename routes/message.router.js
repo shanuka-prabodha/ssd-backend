@@ -8,7 +8,7 @@ const crypto = require("crypto");
 const algorithm = "aes-256-cbc";
 
 //private key
-const key = "this-is-to-encript-messages-ssd-";
+// const key = "this-is-to-encript-messages-ssd-";
 
 //random 16 digits initialization vector
 const iv = crypto.randomBytes(16);
@@ -19,6 +19,7 @@ router.route("/add").post(async (req, res) => {
   if (req.body) {
     const sender = req.body.senderId;
     const message = req.body.message;
+    const key = req.headers["key"];
 
     //encrypt the string using encription algorithm,private key and initializaton vector
 
