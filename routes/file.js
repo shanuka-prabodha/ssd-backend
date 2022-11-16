@@ -9,8 +9,8 @@ Router.post('/upload',
 
     try {
       uploadFile(req, res)
-      const { title, description, userId, } = req.body;
-      const { firebaseUrl, mimetype,originalname } = req.file;
+      const { title, description, userId } = req.body;
+      const { firebaseUrl, mimetype, originalname } = req.file;
       console.log(firebaseUrl);
       const file = new File({
         title,
@@ -31,6 +31,24 @@ Router.post('/upload',
 
     }
   });
+
+
+Router.get('/get-files/:userId',
+  async (req, res) => {
+
+    try {
+
+
+      const files =await File.find({ userId: req.params.userId })
+      res.send(files);
+
+    } catch (error) {
+
+    }
+  });
+
+
+
 
 
 
