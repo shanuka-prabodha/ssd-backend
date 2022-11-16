@@ -17,7 +17,7 @@ const schema = {
     lowercase: true,
   },
   password: { type: String, required: true },
-  accountType: { type: String, enum: ['worker', 'manager'], default: 'worker' },
+  accountType: { type: String, enum: ['worker', 'manager', 'admin'], default: 'worker' },
 };
 
 const timestamps = { createdAt: 'created_at', updatedAt: 'updated_at' };

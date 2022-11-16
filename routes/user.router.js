@@ -41,6 +41,7 @@ router.post('/login', async (req, res) => {
               data: {
                 id: registerd.id,
                 token: token,
+                usertype: registerd.accountType
               },
             });
           } else {
